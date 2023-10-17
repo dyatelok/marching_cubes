@@ -1,5 +1,3 @@
-pub mod cubes;
-
 use euler::*;
 use raylib::prelude::*;
 
