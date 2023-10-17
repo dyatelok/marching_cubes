@@ -1,5 +1,5 @@
 use euler::*;
-use plotter_3d::{Line3, Runner};
+use plotter_3d::{Camera3, Line3, Runner};
 use raylib::color::Color;
 
 fn func(t: f32) -> Vec3 {
@@ -36,10 +36,22 @@ fn setup() -> Vec<Line3> {
     ans
 }
 
+fn cam(t: f32) -> Camera3 {
+    Camera3::from(
+        vec3!(5.0 * t.sin(), 5.0 * t.cos(), 5.0),
+        (vec3!() - vec3!(5.0 * t.sin(), 5.0 * t.cos(), 5.0)).normalize() * 1.5,
+        (vec3!(0.0, 0.0, 10.0) - vec3!(5.0 * t.sin(), 5.0 * t.cos(), 5.0)).normalize(),
+        (vec3!() - vec3!(5.0 * t.sin(), 5.0 * t.cos(), 5.0))
+            .cross(vec3!(0.0, 0.0, 10.0) - vec3!(5.0 * t.sin(), 5.0 * t.cos(), 5.0))
+            .normalize(),
+    )
+}
+
 fn main() {
     let mut runner = Runner::new();
     runner.add_axes(2.0);
     runner.add_setup(Box::new(setup));
+    runner.add_camera(Box::new(cam));
     let runner = runner.prepare();
     runner.run();
 }

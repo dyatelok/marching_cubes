@@ -1,6 +1,6 @@
 use euler::*;
 use itertools::Itertools;
-use plotter_3d::{Line3, Runner};
+use plotter_3d::{Camera3, Line3, Runner};
 use raylib::color::Color;
 
 fn func(x: f32, y: f32, z: f32) -> f32 {
@@ -112,10 +112,22 @@ fn setup() -> Vec<Line3> {
     ans
 }
 
+fn cam(t: f32) -> Camera3 {
+    Camera3::from(
+        vec3!(6.0 * t.sin(), 6.0 * t.cos(), 4.0),
+        (vec3!() - vec3!(6.0 * t.sin(), 6.0 * t.cos(), 4.0)).normalize() * 3.0,
+        (vec3!(0.0, 0.0, 13.0) - vec3!(6.0 * t.sin(), 6.0 * t.cos(), 4.0)).normalize(),
+        (vec3!() - vec3!(6.0 * t.sin(), 6.0 * t.cos(), 4.0))
+            .cross(vec3!(0.0, 0.0, 13.0) - vec3!(6.0 * t.sin(), 6.0 * t.cos(), 4.0))
+            .normalize(),
+    )
+}
+
 fn main() {
     let mut runner = Runner::new();
     runner.add_axes(2.0);
     runner.add_setup(Box::new(setup));
+    runner.add_camera(Box::new(cam));
     let runner = runner.prepare();
     runner.run();
 }
