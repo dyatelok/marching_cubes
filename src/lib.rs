@@ -32,6 +32,7 @@ struct Line2 {
     col: Color,
 }
 
+#[allow(dead_code)]
 impl Line2 {
     fn from(start: Pt2, end: Pt2, col: Color) -> Line2 {
         Line2 { start, end, col }
@@ -78,6 +79,7 @@ pub struct Line3 {
     col: Color,
 }
 
+#[allow(dead_code)]
 impl Line3 {
     fn from(start: Pt3, end: Pt3, col: Color) -> Line3 {
         Line3 { start, end, col }
@@ -134,7 +136,7 @@ impl Camera3 {
     }
     fn project_point(&self, point: Pt3) -> Pt2 {
         let mut p = Pt2::from(0.0, 0.0);
-        let mut v = vec![0.0_f32; 3];
+        let mut v = [0.0_f32; 3];
 
         let m = Mat3::new(
             self.base1.x,
@@ -191,6 +193,12 @@ pub struct Runner<State = Building> {
     state: std::marker::PhantomData<State>,
 }
 
+impl Default for Runner {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Runner {
     pub fn new() -> Self {
         Runner {
@@ -200,7 +208,7 @@ impl Runner {
             scale: (500., 500.),
             lines: Vec::new(),
             camera: Box::new(|_| Default::default()),
-            setup: Box::new(|| Default::default()),
+            setup: Box::new(Default::default),
             state: Default::default(),
         }
     }
